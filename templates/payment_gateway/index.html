@@ -1,0 +1,122 @@
+{%extends 'layouts/base.html'%}
+{%block content%}
+
+<div class="row">
+    <div class="col-md-8 col-8 col-sm-8 col-xs-8 mx-auto mx-md-auto mx-sm-auto">
+
+        <div class="row">
+            <div class="col-md-12 col-12 col-sm-12 col-xs-12">
+                <h4 class="log">Pay Now  <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png"></h4>
+            </div>
+        </div>
+
+        <form  method="post" role="form" id="payment_form" action="{%url 'request_payment_api'%}">
+            {%csrf_token%}
+            <div class="row">
+                <div class="col-md-12 col-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label for="cardNumber">CARD NUMBER</label>
+                        <div class="input-group">
+                            <input type="tel" class="form-control" name="cardNumber" placeholder="Valid Card Number" autocomplete="cc-number" required autofocus />
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-7 col-md-7">
+
+                    <div class="row">
+                        <div class="col-xs-6 col-md-6">
+
+                            <div class="form-group">
+                                <label for="cardExpiry"><span >EXP</span> Year</label>
+                                <input 
+                                type="tel" 
+                                class="form-control" 
+                                name="cardExpiryYear"
+                                placeholder="YYYY"
+                                autocomplete="cc-exp"
+                                required 
+                                />
+                            </div>
+
+                        </div>
+                        <div class="col-xs-6 col-md-6">
+
+                            <div class="form-group">
+                                <label for="cardExpiry"><span>EXP</span> Month</label>
+                                <input 
+                                type="tel" 
+                                class="form-control" 
+                                name="cardExpiryMonth"
+                                placeholder="MM"
+                                autocomplete="cc-exp"
+                                required 
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-5 col-md-5 pull-right">
+                    <div class="form-group">
+                        <label for="cardCVC">CV CODE</label>
+                        <input type="tel" 
+                        class="form-control" name="cardCVC" placeholder="CVC" autocomplete="cc-csc" required
+                        />
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
+                        <label for="Amount">Amount</label>
+                        <input type="number" class="form-control" name="Amount" />
+                    </div>
+                </div>                        
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
+                        <input type="submit" class="form-control btn btn-info" value="Pay"/>
+                    </div>
+                </div>                        
+            </div>
+
+
+
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+    $("#payment_form").submit(function (e) {	
+        e.preventDefault();
+        $.ajax({
+            url : $(this).attr('action'),
+            type : $(this).attr('method'),
+            data : $(this).serialize(),
+            success : function(json){
+ 
+            },
+            error : function(xhr,errmsg,err) {
+            }
+        });
+    });
+
+    $( document ).ajaxStart(function() {
+        $( ".log" ).text( "processing paymment." );
+    });
+
+    $( document ).ajaxStart(function() {
+        $( ".log" ).text( "finished processing paymment." );
+    });
+    </script>
+{%endblock content%}
