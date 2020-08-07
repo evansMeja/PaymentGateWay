@@ -125,3 +125,12 @@ STATICFILES_DIRS = (
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+
+
+PAYMENT_BACKENDS_SETTINGS = {
+	'paypal': {
+		'url': 'https://www.paypal.com/cgi-bin/webscr',			# real payments URL
+#		'url': 'https://www.sandbox.paypal.com/cgi-bin/webscr',	# test payments URL
+		'email': 'evanslagat911@gmail.com',
+	},
+}

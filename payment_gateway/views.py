@@ -2,9 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse,JsonResponse
 from .models import *
 import requests
+from payment_app.settings import PAYMENT_BACKENDS_SETTINGS
 
 def make_payment(request):
     template_name="payment_gateway/index.html"
+    context={}
+    return render(request,template_name,context)
+
+
+def js_approach(request):
+    template_name="payment_gateway/javascript_approach.html"
     context={}
     return render(request,template_name,context)
 
@@ -15,7 +22,7 @@ def request_payment_api(request):
     cardCVC = request.POST.get("cardCVC")
     Amount = request.POST.get("Amount")
     data = {'success':False}
-    url = 'https://www.paypal.com/cgi-bin/webscr'
+    url = PAYMENT_BACKENDS_SETTINGS['paypal']['url']
     try:
         task = {
         "amount": Amount,
