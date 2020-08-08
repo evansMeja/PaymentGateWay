@@ -3,118 +3,71 @@
 
 <div class="row">
     <div class="col-md-8 col-8 col-sm-8 col-xs-8 mx-auto mx-md-auto mx-sm-auto">
-
-        <div class="row">
-            <div class="col-md-12 col-12 col-sm-12 col-xs-12">
-                <h4 class="log">Pay Now  <img class="img-responsive pull-right" src="http://i76.imgup.net/accepted_c22e0.png"></h4>
-            </div>
+       
+ 
+        <div class="form-group">
+            <label for="amount">Amount in USD</label>
+            <input id="amount" class="form-control" value="1" type="number" placeholder="Enter Amount in Usd">
         </div>
+<!-- Set up a container element for the button -->
+<div id="paypal-button-container"></div>
 
-        <form  method="post" role="form" id="payment_form" action="{%url 'request_payment_api'%}">
-            {%csrf_token%}
-            <div class="row">
-                <div class="col-md-12 col-12 col-sm-12 col-xs-12">
-                    <div class="form-group">
-                        <label for="cardNumber">CARD NUMBER</label>
-                        <div class="input-group">
-                            <input type="tel" class="form-control" name="cardNumber" placeholder="Valid Card Number" autocomplete="cc-number" required autofocus />
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xs-7 col-md-7">
-
-                    <div class="row">
-                        <div class="col-xs-6 col-md-6">
-
-                            <div class="form-group">
-                                <label for="cardExpiry"><span >EXP</span> Year</label>
-                                <input 
-                                type="tel" 
-                                class="form-control" 
-                                name="cardExpiryYear"
-                                placeholder="YYYY"
-                                autocomplete="cc-exp"
-                                required 
-                                />
-                            </div>
-
-                        </div>
-                        <div class="col-xs-6 col-md-6">
-
-                            <div class="form-group">
-                                <label for="cardExpiry"><span>EXP</span> Month</label>
-                                <input 
-                                type="tel" 
-                                class="form-control" 
-                                name="cardExpiryMonth"
-                                placeholder="MM"
-                                autocomplete="cc-exp"
-                                required 
-                                />
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-5 col-md-5 pull-right">
-                    <div class="form-group">
-                        <label for="cardCVC">CV CODE</label>
-                        <input type="tel" 
-                        class="form-control" name="cardCVC" placeholder="CVC" autocomplete="cc-csc" required
-                        />
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                    <div class="form-group">
-                        <label for="Amount">Amount</label>
-                        <input type="number" class="form-control" name="Amount" />
-                    </div>
-                </div>                        
-            </div>
-
-            <div class="row">
-                <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                    <div class="form-group">
-                        <input type="submit" class="form-control btn btn-info" value="Pay"/>
-                    </div>
-                </div>                        
-            </div>
-
-
-
-        </form>
-
-
+<!-- Include the PayPal JavaScript SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 
 <script>
-    $("#payment_form").submit(function (e) {	
-        e.preventDefault();
-        $.ajax({
-            url : $(this).attr('action'),
-            type : $(this).attr('method'),
-            data : $(this).serialize(),
+
+// Render the PayPal button into #paypal-button-container
+paypal.Buttons({
+
+    // Set up the transaction
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: {
+                    value: document.getElementById("amount").value
+                }
+            }]
+        });
+    },
+
+    // Finalize the transaction
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            console.log(details);
+            $.ajax({
+            url : "{%url 'request_payment_api'%}",
+            type : "get",
+            data : {
+            "status":details.status,
+            "create_time":details.create_time,
+            'amount':details.purchase_units["0"].amount.value,
+            'phone':details.payer.phone.phone_number.national_number,
+            'currency':details.purchase_units["0"].amount.currency_code,
+            'fname':details.payer.name.given_name,
+            'lname':details.payer.name.surname,
+            'payee_email':details.purchase_units["0"].payee.email_address,
+            'payee_merchant_id':details.purchase_units["0"].payee.merchant_id,
+            'payer_email':details.payer.email_address,
+            'payer_id':details.payer.payer_id
+            },
             success : function(json){
- 
+            alert("SAVED TO SQL db");
             },
             error : function(xhr,errmsg,err) {
+            alert("Error");
+            console.log(xhr.responseText)
             }
+            });
         });
-    });
+    }
 
-    $( document ).ajaxStart(function() {
-        $( ".log" ).text( "processing paymment." );
-    });
 
-    $( document ).ajaxStart(function() {
-        $( ".log" ).text( "finished processing paymment." );
-    });
-    </script>
+}).render('#paypal-button-container');
+</script>
+     
+    </div>                        
+</div>
+
 {%endblock content%}
+
