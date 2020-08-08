@@ -9,9 +9,14 @@
 
 
 ## login
+### admin
 - To login to admin open the link [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin). 
 - username: admin
 - pass: admin123
+
+### sandbox
+email: sb-oi7pi2858537@personal.example.com
+pass:vh7A6G@^
 
 * [guidelines for this project](README.md)
 * @paymentgateway :+1:
