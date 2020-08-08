@@ -1,7 +1,7 @@
 # PAYMENTS GATEWAY
 ## steps
 1. To run the app you need to install the latest version of python from  [python website](http://python.org).
-2. Download the app
+2. Download the app on github
 3. Open terminal or commad prompt in the root folder where manage.py is located
 4. run the command : pip install -r requirements.txt
 5. run the command : python manage.py runserver
