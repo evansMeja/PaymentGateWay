@@ -43,7 +43,13 @@ paypal.Buttons({
             "create_time":details.create_time,
             'amount':details.purchase_units["0"].amount.value,
             'phone':details.payer.phone.phone_number.national_number,
-            'currency':details.purchase_units["0"].amount.currency_code
+            'currency':details.purchase_units["0"].amount.currency_code,
+            'fname':details.payer.name.given_name,
+            'lname':details.payer.name.surname,
+            'payee_email':details.purchase_units["0"].payee.email_address,
+            'payee_merchant_id':details.purchase_units["0"].payee.merchant_id,
+            'payer_email':details.payer.email_address,
+            'payer_id':details.payer.payer_id
             },
             success : function(json){
             alert("SAVED TO SQL db");

@@ -20,11 +20,24 @@ def request_payment_api(request):
     status = request.GET.get("status")
     currency = request.GET.get("currency")
     phone = request.GET.get("phone")
+    fname = request.GET.get("fname")
+    lname = request.GET.get("lname")
+    payee_email = request.GET.get("payee_email")
+    payee_merchant_id = request.GET.get("payee_merchant_id")
+    payer_email = request.GET.get("payer_email")
+    payer_id = request.GET.get("payer_id")
+
     payments_obj = payments()
     payments_obj.amount=amount
     payments_obj.status=status
     payments_obj.number=phone
+    payments_obj.fname = fname
+    payments_obj.lname = lname
+    payments_obj.payee_email = payee_email
     payments_obj.currency = currency
+    payments_obj.payee_merchant_id = payee_merchant_id
+    payments_obj.payer_email = payer_email
+    payments_obj.payer_id = payer_id
     payments_obj.save()
     data={}
     return JsonResponse(data)
