@@ -9,9 +9,9 @@
 
 
 ## login
-To login to admin open the link [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin). 
-username: admin
-pass: admin123
+- To login to admin open the link [http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin). 
+- username: admin
+- pass: admin123
 
-[guidelines for this project](README.md)
-@paymentgateway :+1:
+* [guidelines for this project](README.md)
+* @paymentgateway :+1:
